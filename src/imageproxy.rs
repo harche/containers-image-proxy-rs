@@ -121,7 +121,7 @@ pub struct ImageProxyConfig {
 
     /// Decryption keys to decrypt an encrypted container image.
     /// equivalent to `skopeo copy --decryption-key <path_to_decryption_key> `
-    pub decryption_keys: Option<Vec<String>>,
+    pub decryption_keys: Option<Vec<PathBuf>>,
 
     /// If set, disable TLS verification.  Equivalent to `skopeo --tls-verify=false`.
     pub insecure_skip_tls_verification: Option<bool>,
@@ -567,9 +567,8 @@ mod tests {
         .unwrap();
         validate(c, &[r"--authfile", "/path/to/authfile"], &[]);
 
-        let decryption_key_path = "/path/to/decryption_key";
         let c = Command::try_from(ImageProxyConfig {
-            decryption_keys: Some(vec![decryption_key_path.to_string()]),
+            decryption_keys: Some(vec![PathBuf::from("/path/to/decryption_key")]),
             ..Default::default()
         })
         .unwrap();
